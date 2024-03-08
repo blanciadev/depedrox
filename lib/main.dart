@@ -16,6 +16,12 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _selectedSubject = 'English'; // Default selected subject
+
+  // Define TextEditingController instances
+  final schoolIDController = TextEditingController();
+  final learnersRefNoController = TextEditingController();
+  final fullNameController = TextEditingController();
+
   final Map<String, String> _subjectFiles = {
     'English': 'assets/quest/English3validation.pdf',
     'Science': 'assets/quest/Science3validation.pdf',
@@ -35,7 +41,8 @@ class _MyAppState extends State<MyApp> {
   Future<void> _requestPermission() async {
     // Request external storage write permission
     final status = await Permission.storage.request();
-    if (status.isGranted) {
+     final status2 = await Permission.manageExternalStorage.request();
+    if (status.isGranted && status2.isGranted) {
       print('Permission granted');
     } else {
       print('Permission denied');
@@ -53,29 +60,32 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(180),
+          preferredSize: const Size.fromHeight(120),
           child: AppBar(
             centerTitle: true,
             backgroundColor: Colors.orange,
             automaticallyImplyLeading: false,
-            flexibleSpace: Column(
-              children: const [
+            flexibleSpace: const Column(
+              children: [
                 SizedBox(height: 50),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Image(
-                        image: AssetImage('assets/depedlogo.png'),
-                        width: 150,
-                        height: 120),
+                      image: AssetImage('assets/depedlogo.png'),
+                      width: 150,
+                      height: 120,
+                    ),
                     Image(
-                        image: AssetImage('assets/matatag.png'),
-                        width: 150,
-                        height: 120),
+                      image: AssetImage('assets/matatag.png'),
+                      width: 150,
+                      height: 120,
+                    ),
                     Image(
-                        image: AssetImage('assets/ict.png'),
-                        width: 150,
-                        height: 120),
+                      image: AssetImage('assets/ict.png'),
+                      width: 150,
+                      height: 120,
+                    ),
                   ],
                 ),
               ],
@@ -87,26 +97,61 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
         body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              DropdownButton<String>(
-                value: _selectedSubject,
-                onChanged: (newValue) {
-                  setState(() {
-                    _selectedSubject = newValue!;
-                  });
-                },
-                items: _subjectFiles.keys.map((String subject) {
-                  return DropdownMenuItem<String>(
-                    value: subject,
-                    child: Text(subject),
-                  );
-                }).toList(),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: ListView.builder(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(height: 16.0),
+                TextFormField(
+                  controller: schoolIDController,
+                  decoration: InputDecoration(
+                    labelText: 'School ID',
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                TextFormField(
+                  controller: learnersRefNoController,
+                  decoration: InputDecoration(
+                    labelText: 'Learners Reference No.',
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                TextFormField(
+                  controller: fullNameController,
+                  decoration: InputDecoration(
+                    labelText: 'Full Name',
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                DropdownButton<String>(
+                  value: _selectedSubject,
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedSubject = newValue!;
+                    });
+                  },
+                  items: _subjectFiles.keys.map((String subject) {
+                    return DropdownMenuItem<String>(
+                      value: subject,
+                      child: Text(subject),
+                    );
+                  }).toList(),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    String schoolID = schoolIDController.text;
+                    String learnersRefNo = learnersRefNoController.text;
+                    String fullName = fullNameController.text;
+                    String subject = _selectedSubject; // Use the selected subject
+
+                    await consolidateInputs(
+                        context, _selectedNumbers, _alphabetChoices, schoolID, learnersRefNo, fullName, subject);
+                  },
+                  child: const Text('Consolidate Inputs'),
+                ),
+                const SizedBox(height: 16.0),
+                ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   itemCount: 10,
@@ -116,6 +161,7 @@ class _MyAppState extends State<MyApp> {
                       children: [
                         Text('${index + 1}: '),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: _alphabetChoices.map((choice) {
                             int groupValue = _selectedNumbers[index] ?? -1;
                             return Row(
@@ -138,38 +184,57 @@ class _MyAppState extends State<MyApp> {
                     );
                   },
                 ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  consolidateInputs(_selectedNumbers, _alphabetChoices);
-                },
-                child: const Text('Consolidate Inputs'),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Future<void> consolidateInputs(Map<int, int> selectedNumbers, List<String> alphabetChoices) async {
+  Future<void> consolidateInputs(
+      BuildContext context,
+      Map<int, int> selectedNumbers,
+      List<String> alphabetChoices,
+      String schoolID,
+      String learnersRefNo,
+      String fullName,
+      String subject) async {
+
     try {
-      final directory = await getExternalStorageDirectory();
-      final folderPath = '${directory!.path}/ROX_ACHIEVEMENT_TEST';
+       final directory = await getExternalStorageDirectory();
+        final folderPath = '${directory!.path}/ROX_ACHIEVEMENT_TEST';
       final folder = Directory(folderPath);
       if (!folder.existsSync()) {
         folder.createSync(recursive: true);
       }
-      final file = File('$folderPath/selected_choices.txt');
+      final file = File('$folderPath/$schoolID-$learnersRefNo-Questionnaire-$subject.txt');
       final sink = file.openWrite();
-      selectedNumbers.forEach((number, choiceIndex) {
-        final choice = alphabetChoices[choiceIndex];
-        sink.writeln('Number $number: Choice $choice');
-      });
+
+      sink.writeln('"$schoolID"');
+      sink.writeln('"$learnersRefNo"');
+      sink.writeln('"$fullName"');
+      sink.writeln('"$subject"');
+
+      String choicesString = selectedNumbers.keys.map((index) {
+        final choiceIndex = selectedNumbers[index];
+        final choice = alphabetChoices[choiceIndex ?? 0];
+        return '"$choice"';
+      }).join(', ');
+
+      sink.writeln('Choices: $choicesString');
+
       await sink.close();
       print('File saved successfully');
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Consolidation Successful')),
+      );
     } catch (e) {
       print('Error saving file: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error saving file: $e')),
+      );
     }
   }
 }
