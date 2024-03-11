@@ -18,7 +18,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _selectedSubject = 'English'; // Default selected subject
+  String _selectedSubject = 'Math'; // Default selected subject
 
   // Define TextEditingController instances
   final schoolIDController = TextEditingController();
@@ -27,9 +27,10 @@ class _MyAppState extends State<MyApp> {
 
   String _pdfPath = '';
   final Map<String, String> _subjectFiles = {
+
     'English': 'assets/quest/English3validation.pdf',
     'Science': 'assets/quest/Science3validation.pdf',
-    'Math': 'assets/quest/Math3validation.pdf',
+    'Math': 'assets/quest/English3validation.pdf',
   };
 
   final Map<int, int> _selectedNumbers = {}; // Map to store selected numbers
@@ -213,7 +214,7 @@ class _MyAppState extends State<MyApp> {
               ),
             ),
             Expanded(
-              child: PdfViewerPage(),
+              child: PdfViewerPage(pdfPath: _pdfPath),
             ),
           ],
         ),
@@ -279,6 +280,10 @@ class _MyAppState extends State<MyApp> {
 }
 
 class PdfViewerPage extends StatelessWidget {
+  final String pdfPath;
+
+  const PdfViewerPage({Key? key, required this.pdfPath}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -286,7 +291,7 @@ class PdfViewerPage extends StatelessWidget {
         title: const Text('PDF Viewer'),
       ),
       body: SfPdfViewer.asset(
-        'assets/quest/English3validation.pdf', // Change the file path accordingly
+        pdfPath, // Use the selected PDF file path
       ),
     );
   }
