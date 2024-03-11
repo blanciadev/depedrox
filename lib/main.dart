@@ -4,8 +4,6 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart'; // Import from Syncfusion package
 
-
-
 void main() {
   runApp(const MyApp());
 }
@@ -18,7 +16,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _selectedSubject = 'Math'; // Default selected subject
+  String _selectedSubject = 'Select Subject'; // Default selected subject
 
   // Define TextEditingController instances
   final schoolIDController = TextEditingController();
@@ -27,7 +25,7 @@ class _MyAppState extends State<MyApp> {
 
   String _pdfPath = '';
   final Map<String, String> _subjectFiles = {
-
+    'Select Subject': 'assets/quest/RX-Adobe-RAT.pdf',
     'English': 'assets/quest/English3validation.pdf',
     'Science': 'assets/quest/Science3validation.pdf',
     'Math': 'assets/quest/English3validation.pdf',
@@ -43,11 +41,7 @@ class _MyAppState extends State<MyApp> {
     _requestPermission(); // Request permission when the app starts
 
     _pdfPath = _subjectFiles[_selectedSubject]!;
-
   }
-
-
-
 
   Future<void> _requestPermission() async {
     // Request external storage write permission
@@ -59,6 +53,7 @@ class _MyAppState extends State<MyApp> {
       print('Permission denied');
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -70,31 +65,24 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(150),
+          preferredSize: const Size.fromHeight(195),
           child: AppBar(
             centerTitle: true,
-            backgroundColor: Colors.orange,
+            backgroundColor: Color.fromARGB(255, 228, 122, 2),
             automaticallyImplyLeading: false,
-            flexibleSpace: Column(
+            flexibleSpace: const Column(
               children: [
-                SizedBox(height: 50),
+                SizedBox(height: 45),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image(
-                      image: AssetImage('assets/depedlogo.png'),
-                      width: 150,
-                      height: 120,
-                    ),
-                    Image(
-                      image: AssetImage('assets/matatag.png'),
-                      width: 150,
-                      height: 120,
-                    ),
-                    Image(
-                      image: AssetImage('assets/ict.png'),
-                      width: 150,
-                      height: 120,
+                    Padding(
+                      padding: EdgeInsets.all(5), // Set padding to zero
+                      child: Image(
+                        image: AssetImage('assets/RX_ADOBE.png'),
+                        width: 480,
+                        height: 160,
+                      ),
                     ),
                   ],
                 ),
@@ -102,7 +90,11 @@ class _MyAppState extends State<MyApp> {
             ),
             title: const Text(
               'RX ADOBE-REGIONAL ACHIEVEMENT TEST',
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 30,
+                fontFamily: 'BookmanOldStyle',
+              ),
             ),
           ),
         ),
@@ -110,121 +102,166 @@ class _MyAppState extends State<MyApp> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
+              child: PdfViewerPage(pdfPath: _pdfPath),
+            ),
+            
+            Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(70.0),
                 child: SingleChildScrollView(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const SizedBox(height: 16.0),
-                      TextFormField(
-                        controller: schoolIDController,
-                        decoration: const InputDecoration(
-                          labelText: 'School ID',
-                        ),
-                      ),
-                      const SizedBox(height: 16.0),
-                      TextFormField(
-                        controller: learnersRefNoController,
-                        decoration: const InputDecoration(
-                          labelText: 'Learners Reference No.',
-                        ),
-                      ),
-                      const SizedBox(height: 16.0),
-                      TextFormField(
-                        controller: fullNameController,
-                        decoration: const InputDecoration(
-                          labelText: 'Full Name',
-                        ),
-                      ),
-                      const SizedBox(height: 16.0),
-                      DropdownButton<String>(
-                        value: _selectedSubject,
-                        onChanged: (newValue) {
-                          setState(() {
-                            _selectedSubject = newValue!;
-                            _pdfPath = _subjectFiles[_selectedSubject]!;
-                          });
-                        },
-                        items: _subjectFiles.keys.map((String subject) {
-                          return DropdownMenuItem<String>(
-                            value: subject,
-                            child: Text(subject),
-                          );
-                        }).toList(),
-                      ),
-                      const SizedBox(height: 16.0),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: 10,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                    //    const SizedBox(height: 16.0),
+                        Container(
+                          color: Color.fromARGB(255, 228, 122, 2), // Background color for the section
+                          padding: EdgeInsets.all(16.0), // Add padding to the container
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              Text('${index + 1}: '),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: _alphabetChoices.map((choice) {
-                                  int groupValue = _selectedNumbers[index] ?? -1;
-                                  return Row(
-                                    children: [
-                                      Radio<int>(
-                                        value: _alphabetChoices.indexOf(choice),
-                                        groupValue: groupValue,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            _selectedNumbers[index] = value!;
-                                          });
-                                        },
-                                      ),
-                                      Text(choice),
-                                    ],
+                              TextFormField(
+                                controller: schoolIDController,
+                                decoration: const InputDecoration(
+                                  labelText: 'School ID',
+                                  fillColor: Colors
+                                      .white, // Input field background color
+                                  filled: true, // Ensure input field is filled
+                                ),
+                              ),
+                              const SizedBox(height: 16.0),
+                              TextFormField(
+                                controller: learnersRefNoController,
+                                decoration: const InputDecoration(
+                                  labelText: 'Learners Reference No.',
+                                  fillColor: Colors
+                                      .white, // Input field background color
+                                  filled: true, // Ensure input field is filled
+                                ),
+                              ),
+                              const SizedBox(height: 16.0),
+                              TextFormField(
+                                controller: fullNameController,
+                                decoration: const InputDecoration(
+                                  labelText: 'Full Name',
+                                  fillColor: Colors
+                                      .white, // Input field background color
+                                  filled: true, // Ensure input field is filled
+                                ),
+                              ),
+                              const SizedBox(height: 16.0),
+                              DropdownButton<String>(
+                                value: _selectedSubject,
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    _selectedSubject = newValue!;
+                                    _pdfPath = _subjectFiles[_selectedSubject]!;
+                                  });
+                                },
+                                items: _subjectFiles.keys.map((String subject) {
+                                  return DropdownMenuItem<String>(
+                                    value: subject,
+                                    child: Text(subject),
                                   );
                                 }).toList(),
                               ),
                             ],
-                          );
-                        },
-                      ),
-                      ElevatedButton(
-                        onPressed: _isAnyFieldEmpty()
-                            ? null
-                            : () async {
-                          String schoolID = schoolIDController.text;
-                          String learnersRefNo = learnersRefNoController.text;
-                          String fullName = fullNameController.text;
-                          String subject = _selectedSubject;
+                          ),
+                        ),
+                        SizedBox(height: 20.0),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height *
+                              0.5, // Adjust the height as needed
+                          child: SingleChildScrollView(
+                            child: SizedBox(
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: 10,
+                                itemBuilder: (context, index) {
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text('${index + 1}: '),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children:
+                                            _alphabetChoices.map((choice) {
+                                          int groupValue =
+                                              _selectedNumbers[index] ?? -1;
+                                          return Row(
+                                            children: [
+                                              Container(
+                                                width:
+                                                    30, // Adjust the width of the Radio buttons
+                                                child: Radio<int>(
+                                                  value: _alphabetChoices
+                                                      .indexOf(choice),
+                                                  groupValue: groupValue,
+                                                  onChanged: (value) {
+                                                    setState(() {
+                                                      _selectedNumbers[index] =
+                                                          value!;
+                                                    });
+                                                  },
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                  width:
+                                                      2), // Add padding between Radio buttons
+                                              Text(choice),
+                                            ],
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            if (_isAnyFieldEmpty()) {
+                              // Show a SnackBar indicating missing inputs
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                      'Please fill in all fields before consolidating inputs.'),
+                                ),
+                              );
+                            } else {
+                              // All fields are filled, proceed with consolidation
+                              String schoolID = schoolIDController.text;
+                              String learnersRefNo =
+                                  learnersRefNoController.text;
+                              String fullName = fullNameController.text;
+                              String subject = _selectedSubject;
 
-                          await consolidateInputs(
-                            context,
-                            _selectedNumbers,
-                            _alphabetChoices,
-                            schoolID,
-                            learnersRefNo,
-                            fullName,
-                            subject,
-                          );
-                        },
-                        child: const Text('Consolidate Inputs & View PDF'),
-                      ),
-                    ],
-                  ),
+                              await consolidateInputs(
+                                context,
+                                _selectedNumbers,
+                                _alphabetChoices,
+                                schoolID,
+                                learnersRefNo,
+                                fullName,
+                                subject,
+                              );
+                            }
+                          },
+                          child: const Text('Consolidate Inputs'),
+                        ),
+                      ]),
                 ),
               ),
-            ),
-            Expanded(
-              child: PdfViewerPage(pdfPath: _pdfPath),
             ),
           ],
         ),
       ),
     );
   }
-
-
-
-
 
   bool _isAnyFieldEmpty() {
     return schoolIDController.text.isEmpty ||
@@ -248,7 +285,8 @@ class _MyAppState extends State<MyApp> {
       if (!folder.existsSync()) {
         folder.createSync(recursive: true);
       }
-      final file = File('$folderPath/$schoolID-$learnersRefNo-Questionnaire-$subject.txt');
+      final file = File(
+          '$folderPath/$schoolID-$learnersRefNo-Questionnaire-$subject.txt');
       final sink = file.openWrite();
 
       sink.writeln('"$schoolID"');
@@ -265,8 +303,9 @@ class _MyAppState extends State<MyApp> {
       sink.writeln('Choices: $choicesString');
 
       await sink.close();
-      print('File saved successfully');
-
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('File saved successfully')),
+      );
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Consolidation Successful')),
       );
@@ -288,7 +327,7 @@ class PdfViewerPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('PDF Viewer'),
+        title: const Text(''),
       ),
       body: SfPdfViewer.asset(
         pdfPath, // Use the selected PDF file path

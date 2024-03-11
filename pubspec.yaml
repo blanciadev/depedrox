@@ -40,6 +40,7 @@ dependencies:
   android_intent: ^2.0.2
   syncfusion_flutter_pdfviewer: ^20.3.49
   
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -55,20 +56,25 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
-flutter:
-
+flutter:  
+  
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
 
+  fonts:
+  - family: BookmanOldStyle
+    fonts:
+      - asset: assets/fonts/BOOKOS.ttf
 
 
   assets:
     - assets/depedlogo.png
     - assets/ict.png
     - assets/matatag.png
-
+    - assets/RX_ADOBE.png
+    - assets/quest/RX-Adobe-RAT.pdf
     - assets/quest/English3validation.pdf
     - assets/quest/Math3validation.pdf
     - assets/quest/Science3validation.pdf
@@ -89,6 +95,8 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+  
+
   # fonts:
   #   - family: Schyler
   #     fonts:
