@@ -65,23 +65,27 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(195),
+          preferredSize: const Size.fromHeight(220), // Increase the preferred size
           child: AppBar(
             centerTitle: true,
-            backgroundColor: Color.fromARGB(255, 228, 122, 2),
+            backgroundColor: const Color.fromARGB(255, 246, 91, 23),
             automaticallyImplyLeading: false,
+            toolbarHeight: 100, // Adjust the toolbar height as needed
             flexibleSpace: const Column(
               children: [
-                SizedBox(height: 45),
+                SizedBox(height: 65),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
                       padding: EdgeInsets.all(5), // Set padding to zero
-                      child: Image(
-                        image: AssetImage('assets/RX_ADOBE.png'),
+                      child: SizedBox(
                         width: 480,
                         height: 160,
+                        child: Image(
+                          image: AssetImage('assets/RX_ADOBE.png'),
+                          fit: BoxFit.contain, // Adjust image fit as needed
+                        ),
                       ),
                     ),
                   ],
@@ -89,33 +93,35 @@ class _MyAppState extends State<MyApp> {
               ],
             ),
             title: const Text(
-              'RX ADOBE-REGIONAL ACHIEVEMENT TEST',
+              'RX ADOBE REGIONAL ACHIEVEMENT TEST',
+              textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 30,
+                letterSpacing: 0.5,
                 fontFamily: 'BookmanOldStyle',
               ),
             ),
           ),
         ),
-        body: Row(
+
+
+      body: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               child: PdfViewerPage(pdfPath: _pdfPath),
             ),
-            
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(70.0),
+                padding: const EdgeInsets.all(40.0),
                 child: SingleChildScrollView(
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                    //    const SizedBox(height: 16.0),
                         Container(
-                          color: Color.fromARGB(255, 228, 122, 2), // Background color for the section
-                          padding: EdgeInsets.all(16.0), // Add padding to the container
+                          color: const Color.fromARGB(255, 244, 91, 23), // Background color for the section
+                          padding: const EdgeInsets.all(16.0), // Add padding to the container
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
@@ -167,10 +173,10 @@ class _MyAppState extends State<MyApp> {
                             ],
                           ),
                         ),
-                        SizedBox(height: 20.0),
+                        const SizedBox(height: 30.0),
                         SizedBox(
                           height: MediaQuery.of(context).size.height *
-                              0.5, // Adjust the height as needed
+                              .4, // Adjust the height as needed
                           child: SingleChildScrollView(
                             child: SizedBox(
                               child: ListView.builder(
@@ -192,7 +198,7 @@ class _MyAppState extends State<MyApp> {
                                               _selectedNumbers[index] ?? -1;
                                           return Row(
                                             children: [
-                                              Container(
+                                              SizedBox(
                                                 width:
                                                     30, // Adjust the width of the Radio buttons
                                                 child: Radio<int>(
@@ -207,7 +213,7 @@ class _MyAppState extends State<MyApp> {
                                                   },
                                                 ),
                                               ),
-                                              SizedBox(
+                                              const SizedBox(
                                                   width:
                                                       2), // Add padding between Radio buttons
                                               Text(choice),
@@ -321,7 +327,7 @@ class _MyAppState extends State<MyApp> {
 class PdfViewerPage extends StatelessWidget {
   final String pdfPath;
 
-  const PdfViewerPage({Key? key, required this.pdfPath}) : super(key: key);
+  const PdfViewerPage({super.key, required this.pdfPath});
 
   @override
   Widget build(BuildContext context) {
