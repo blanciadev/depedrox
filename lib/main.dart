@@ -18,7 +18,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _selectedSubject = 'Select Subject'; // Default selected subject
-
   // Define TextEditingController instances
   final schoolIDController = TextEditingController();
   final learnersRefNoController = TextEditingController();
@@ -256,40 +255,33 @@ class _MyAppState extends State<MyApp> {
                           ),
                         ),
                         ElevatedButton(
-                          onPressed: () async {
-                            if (_isAnyFieldEmpty()) {
-                              // Show a SnackBar indicating missing inputs
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    'Please fill in all fields before consolidating inputs.',
-                                  ),
-                                ),
-                              );
-                            } else {
-                              // All fields are filled, proceed with consolidation
-                              String schoolID = schoolIDController.text;
-                              String learnersRefNo = learnersRefNoController
-                                  .text;
-                              String fullName = fullNameController.text;
-                              String subject = _selectedSubject;
+                          onPressed: _isAnyFieldEmpty() ||
+                              _selectedSubject == 'Select Subject' ||
+                              !_areNumbersValid() || // Check for valid numbers
+                              _selectedNumbers.length != 10 // Check for item count
+                              ? null
+                              : () async {
+                            String schoolID = schoolIDController.text;
+                            String learnersRefNo = learnersRefNoController.text;
+                            String fullName = fullNameController.text;
+                            String subject = _selectedSubject;
 
-                              await consolidateInputs(
-                                context,
-                                _selectedNumbers,
-                                _alphabetChoices,
-                                schoolID,
-                                learnersRefNo,
-                                fullName,
-                                subject,
-                              );
-                            }
+                            await consolidateInputs(
+                              context,
+                              _selectedNumbers,
+                              _alphabetChoices,
+                              schoolID,
+                              learnersRefNo,
+                              fullName,
+                              subject,
+                            );
                           },
                           child: const Text('Consolidate Inputs'),
                         ),
 
 
-                      ]),
+                      ]
+                  ),
                 ),
               ),
             ),
@@ -299,10 +291,22 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
+  bool _areNumbersValid() {
+    // Iterate through _selectedNumbers and check if all values are within the valid range (0 to 3 in this case)
+    for (int value in _selectedNumbers.values) {
+      if (value < 0 || value > 3) {
+        return false; // Return false if any value is outside the valid range
+      }
+    }
+    return true; // All values are within the valid range
+  }
+
   bool _isAnyFieldEmpty() {
     return schoolIDController.text.isEmpty ||
         learnersRefNoController.text.isEmpty ||
+        _selectedNumbers.isEmpty ||
         fullNameController.text.isEmpty;
+
   }
 
   Future<void> consolidateInputs(BuildContext context,
