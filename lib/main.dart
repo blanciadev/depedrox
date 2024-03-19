@@ -161,7 +161,7 @@ class _MyAppState extends State<MyApp> {
                                 keyboardType: TextInputType.number,
                                 inputFormatters: [
                                   FilteringTextInputFormatter.digitsOnly,
-                                  LengthLimitingTextInputFormatter(7),
+                                  LengthLimitingTextInputFormatter(12),
                                 ],
                               ),
                               const SizedBox(height: 12.0),
