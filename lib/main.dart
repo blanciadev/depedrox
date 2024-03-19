@@ -54,9 +54,9 @@ class _MyAppState extends State<MyApp> {
       print('Permission denied');
     }
   }
-
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 480; // Define mobile layout threshold
     return MaterialApp(
       title: 'RX ADOBE-REGIONAL ACHIEVEMENT TEST',
       theme: ThemeData(
@@ -66,221 +66,191 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(100),
-            // Increase the preferred size
-            child:
-            AppBar(
-              centerTitle: true,
-              backgroundColor: const Color.fromARGB(255, 246, 91, 23),
-              automaticallyImplyLeading: false,
-              toolbarHeight: 90,
-              // Adjust the toolbar height as needed
-              flexibleSpace: SizedBox(
-                height: double.infinity,
-                // Set height to infinity to prevent overflow
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 25), // Add some top spacing
-                    Text(
-                      'RX ADOBE REGIONAL ACHIEVEMENT TEST',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                        // Adjust the font size
-                        letterSpacing: 0.5,
-                        fontFamily: 'BookmanOldStyle',
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-
-                    Expanded(
-                      child: AspectRatio(
-                        aspectRatio: 30 / 9, // Adjust aspect ratio as needed
-                        child: Image(
-                          image: AssetImage('assets/RX_ADOBE.png'),
-                          fit: BoxFit.cover, // Adjust image fit as needed
-                        ),
-                      ),
-                    ),
-                  ],
+          preferredSize: const Size.fromHeight(100),
+          child: AppBar(
+            centerTitle: true,
+            backgroundColor: const Color.fromARGB(255, 246, 91, 23),
+            automaticallyImplyLeading: false,
+            toolbarHeight: 90,
+            flexibleSpace: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 25),
+                Text(
+                  'RX ADOBE REGIONAL ACHIEVEMENT TEST',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    letterSpacing: 0.5,
+                    fontFamily: 'BookmanOldStyle',
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-            )
+                Expanded(
+                  child: AspectRatio(
+                    aspectRatio: 30 / 9,
+                    child: Image(
+                      image: AssetImage('assets/RX_ADOBE.png'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
-
-
         body: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // First Expanded widget for PDF viewer (2/3rd of the screen width)
             Expanded(
-              flex: 2, // Flex factor to determine relative widths
+              flex: isMobile ? 2 : 4, // Adjust flex for mobile and tablet
               child: FractionallySizedBox(
-                widthFactor: 1, // 1/4th of the available width
+                widthFactor: 1,
                 child: PdfViewerPage(pdfPath: _pdfPath),
               ),
             ),
-            // Second Expanded widget for other content (1/3rd of the screen width)
             Expanded(
-              flex: 1,
+              flex: isMobile ? 1 : 2, // Adjust flex for mobile and tablet
               child: Padding(
-                padding: const EdgeInsets.all(15.0),
+                padding: EdgeInsets.all(isMobile ? 8.0 : 15.0), // Apply different padding for mobile and tablet
                 child: SingleChildScrollView(
                   child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Container(
-                          color: const Color.fromARGB(255, 244, 91, 23),
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              TextFormField(
-                                controller: schoolIDController,
-                                decoration: const InputDecoration(
-                                  labelText: 'School ID',
-                                  fillColor: Colors.white,
-                                  filled: true,
-                                ),
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly,
-                                  LengthLimitingTextInputFormatter(7),
-                                ],
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Container(
+                        color: const Color.fromARGB(255, 244, 91, 23),
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            TextFormField(
+                              controller: schoolIDController,
+                              decoration: const InputDecoration(
+                                labelText: 'School ID',
+                                fillColor: Colors.white,
+                                filled: true,
                               ),
-                              const SizedBox(height: 12.0),
-                              TextFormField(
-                                controller: learnersRefNoController,
-                                decoration: const InputDecoration(
-                                  labelText: 'Learners Reference No.',
-                                  fillColor: Colors.white,
-                                  filled: true,
-                                ),
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly,
-                                  LengthLimitingTextInputFormatter(12),
-                                ],
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                LengthLimitingTextInputFormatter(7),
+                              ],
+                            ),
+                            const SizedBox(height: 12.0),
+                            TextFormField(
+                              controller: learnersRefNoController,
+                              decoration: const InputDecoration(
+                                labelText: 'Learners Reference No.',
+                                fillColor: Colors.white,
+                                filled: true,
                               ),
-                              const SizedBox(height: 12.0),
-                              TextFormField(
-                                controller: fullNameController,
-                                decoration: const InputDecoration(
-                                  labelText: 'Full Name',
-                                  fillColor: Colors.white,
-                                  filled: true,
-                                ),
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                LengthLimitingTextInputFormatter(12),
+                              ],
+                            ),
+                            const SizedBox(height: 12.0),
+                            TextFormField(
+                              controller: fullNameController,
+                              decoration: const InputDecoration(
+                                labelText: 'Full Name',
+                                fillColor: Colors.white,
+                                filled: true,
                               ),
-                              const SizedBox(height: 5.0),
-                            ],
-                          ),
+                            ),
+                            const SizedBox(height: 5.0),
+                          ],
                         ),
-                        const SizedBox(height: 25.0),
-                        DropdownButton<String>(
-                          value: _selectedSubject,
-                          onChanged: (newValue) {
-                            setState(() {
-                              _selectedSubject = newValue!;
-                              _pdfPath = _subjectFiles[_selectedSubject]!;
-                            });
-                          },
-                          items: _subjectFiles.keys.map((String subject) {
-                            return DropdownMenuItem<String>(
-                              value: subject,
-                              child: Text(subject),
-                            );
-                          }).toList(),
-                        ),
-
-                        const SizedBox(height: 25.0),
-                        SizedBox(
-                          height: MediaQuery
-                              .of(context)
-                              .size
-                              .height *
-                              .4, // Adjust the height as needed
-                          child: SingleChildScrollView(
-                            child: SizedBox(
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: 10,
-                                itemBuilder: (context, index) {
-                                  return Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      Text('${index + 1}: '),
-                                      Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                        children:
-                                        _alphabetChoices.map((choice) {
-                                          int groupValue =
-                                              _selectedNumbers[index] ?? -1;
-                                          return Row(
-                                            children: [
-                                              SizedBox(
-                                                width:
-                                                30,
-                                                // Adjust the width of the Radio buttons
-                                                child: Radio<int>(
-                                                  value: _alphabetChoices
-                                                      .indexOf(choice),
-                                                  groupValue: groupValue,
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      _selectedNumbers[index] =
-                                                      value!;
-                                                    });
-                                                  },
-                                                ),
+                      ),
+                      const SizedBox(height: 25.0),
+                      DropdownButton<String>(
+                        value: _selectedSubject,
+                        onChanged: (newValue) {
+                          setState(() {
+                            _selectedSubject = newValue!;
+                            _pdfPath = _subjectFiles[_selectedSubject]!;
+                          });
+                        },
+                        items: _subjectFiles.keys.map((String subject) {
+                          return DropdownMenuItem<String>(
+                            value: subject,
+                            child: Text(subject),
+                          );
+                        }).toList(),
+                      ),
+                      const SizedBox(height: 10.0),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.5,
+                        child: SingleChildScrollView(
+                          child: SizedBox(
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: 10,
+                              itemBuilder: (context, index) {
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('${index + 1}: '),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: _alphabetChoices.map((choice) {
+                                        int groupValue = _selectedNumbers[index] ?? -1;
+                                        return Row(
+                                          children: [
+                                            Container(
+                                              width: 18, // Adjust the width as needed
+                                              child: Radio<int>(
+                                                value: _alphabetChoices.indexOf(choice),
+                                                groupValue: groupValue,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    _selectedNumbers[index] = value!;
+                                                  });
+                                                },
                                               ),
-                                              const SizedBox(
-                                                  width:
-                                                  2),
-                                              // Add padding between Radio buttons
-                                              Text(choice),
-                                            ],
-                                          );
-                                        }).toList(),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              ),
+                                            ),
+                                            const SizedBox(width: 2), // Adjust the spacing between Radio and Text
+                                            Text(choice),
+                                          ],
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ],
+                                );
+                              },
                             ),
                           ),
                         ),
-                        ElevatedButton(
-                          onPressed: _isAnyFieldEmpty() ||
-                              _selectedSubject == 'Select Subject' ||
-                              !_areNumbersValid() || // Check for valid numbers
-                              _selectedNumbers.length != 10 // Check for item count
-                              ? null
-                              : () async {
-                            String schoolID = schoolIDController.text;
-                            String learnersRefNo = learnersRefNoController.text;
-                            String fullName = fullNameController.text;
-                            String subject = _selectedSubject;
 
-                            await consolidateInputs(
-                              context,
-                              _selectedNumbers,
-                              _alphabetChoices,
-                              schoolID,
-                              learnersRefNo,
-                              fullName,
-                              subject,
-                            );
-                          },
-                          child: const Text('Consolidate Inputs'),
-                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: _isAnyFieldEmpty() ||
+                            _selectedSubject == 'Select Subject' ||
+                            !_areNumbersValid() ||
+                            _selectedNumbers.length != 10
+                            ? null
+                            : () async {
+                          String schoolID = schoolIDController.text;
+                          String learnersRefNo = learnersRefNoController.text;
+                          String fullName = fullNameController.text;
+                          String subject = _selectedSubject;
 
-
-                      ]
+                          await consolidateInputs(
+                            context,
+                            _selectedNumbers,
+                            _alphabetChoices,
+                            schoolID,
+                            learnersRefNo,
+                            fullName,
+                            subject,
+                          );
+                        },
+                        child: const Text('Consolidate Inputs'),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -290,6 +260,7 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
+
 
   bool _areNumbersValid() {
     // Iterate through _selectedNumbers and check if all values are within the valid range (0 to 3 in this case)
