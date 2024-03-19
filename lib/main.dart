@@ -325,7 +325,7 @@ class _MyAppState extends State<MyApp> {
         folder.createSync(recursive: true);
       }
       final file = File(
-          '$folderPath/$schoolID-$learnersRefNo-Questionnaire-$subject.txt');
+          '$folderPath/$schoolID-$learnersRefNo-Questionnaire-$subject.rox');
       final sink = file.openWrite();
 
       sink.writeln('"$schoolID"');
