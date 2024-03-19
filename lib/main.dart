@@ -65,44 +65,52 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(220), // Increase the preferred size
-          child: AppBar(
+          preferredSize: const Size.fromHeight(100), // Increase the preferred size
+          child:
+          AppBar(
             centerTitle: true,
             backgroundColor: const Color.fromARGB(255, 246, 91, 23),
             automaticallyImplyLeading: false,
-            toolbarHeight: 100, // Adjust the toolbar height as needed
-            flexibleSpace: const Column(
-              children: [
-                SizedBox(height: 65),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(5), // Set padding to zero
-                      child: SizedBox(
-                        width: 480,
-                        height: 160,
-                        child: Image(
-                          image: AssetImage('assets/RX_ADOBE.png'),
-                          fit: BoxFit.contain, // Adjust image fit as needed
-                        ),
+            toolbarHeight: 90, // Adjust the toolbar height as needed
+            flexibleSpace: SizedBox(
+              height: double.infinity, // Set height to infinity to prevent overflow
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 25), // Add some top spacing
+                  Text(
+                    'RX ADOBE REGIONAL ACHIEVEMENT TEST',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15, // Adjust the font size
+                      letterSpacing: 0.5,
+                      fontFamily: 'BookmanOldStyle',
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  Expanded(
+                    child: AspectRatio(
+                      aspectRatio: 30 / 9, // Adjust aspect ratio as needed
+                      child: Image(
+                        image: AssetImage('assets/RX_ADOBE.png'),
+                        fit: BoxFit.cover, // Adjust image fit as needed
                       ),
                     ),
-                  ],
-                ),
-              ],
-            ),
-            title: const Text(
-              'RX ADOBE REGIONAL ACHIEVEMENT TEST',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 30,
-                letterSpacing: 0.5,
-                fontFamily: 'BookmanOldStyle',
+                  ),
+                ],
               ),
             ),
-          ),
+          )
+
+
+
+
+
+
+
+
         ),
 
 
@@ -114,7 +122,7 @@ class _MyAppState extends State<MyApp> {
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(40.0),
+                padding: const EdgeInsets.all(30.0),
                 child: SingleChildScrollView(
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -173,7 +181,7 @@ class _MyAppState extends State<MyApp> {
                             ],
                           ),
                         ),
-                        const SizedBox(height: 30.0),
+                        const SizedBox(height: 25.0),
                         SizedBox(
                           height: MediaQuery.of(context).size.height *
                               .4, // Adjust the height as needed
