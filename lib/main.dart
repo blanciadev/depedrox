@@ -27,31 +27,55 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  String _selectedSubject = 'Select Subject'; // Default selected subject
-  // Define TextEditingController instances
+  String _selectedGrade = 'Grade 3'; // Default selected grade
   final schoolIDController = TextEditingController();
   final learnersRefNoController = TextEditingController();
   final fullNameController = TextEditingController();
 
-  String _pdfPath = '';
-
-  final Map<String, String> _subjectFiles = {
-    'Select Subject': 'assets/quest/RX-Adobe-RAT.pdf',
-    'English': 'assets/quest/English3validation.pdf',
-    'Science': 'assets/quest/Science3validation.pdf',
-    'Math': 'assets/quest/English3validation.pdf',
+  final Map<String, Map<String, String>> _gradeSubjectFiles = {
+    'Grade 3': {
+      'Select Subject': 'assets/quest/RX-Adobe-RAT.pdf',
+      'Math': 'assets/quest/grade_3/Mathematics.pdf',
+      'Filipino': 'assets/quest/grade_3/Filipino.pdf',
+      'ESP': 'assets/quest/grade_3/Edukasyong Pagkakatao.pdf',
+    },
+    'Grade 6': {
+      'Select Subject': 'assets/quest/RX-Adobe-RAT.pdf',
+      'Math': 'assets/grade6/math.pdf',
+      'English': 'assets/grade6/english.pdf',
+      'Science': 'assets/grade6/science.pdf',
+    },
+    'Grade 10': {
+      'Select Subject': 'assets/quest/RX-Adobe-RAT.pdf',
+      'Math': 'assets/grade10/math.pdf',
+      'English': 'assets/grade10/english.pdf',
+      'Science': 'assets/grade10/science.pdf',
+    },
+    'Grade 12': {
+      'Select Subject': 'assets/quest/RX-Adobe-RAT.pdf',
+      'Math': 'assets/grade12/math.pdf',
+      'English': 'assets/grade12/english.pdf',
+      'Science': 'assets/grade12/science.pdf',
+    },
   };
 
-  final Map<int, int> _selectedNumbers = {}; // Map to store selected numbers
+  List<String> _getSortedSubjects(String grade) {
+    List<String> subjects = _gradeSubjectFiles[grade]!.keys.toList();
+    subjects.remove('Select Subject'); // Remove "Select Subject" temporarily
+    subjects.sort(); // Sort remaining subjects alphabetically
+    subjects.insert(0, 'Select Subject');
+    return subjects;
+  }
 
+  String _selectedSubject = 'Select Subject'; // Default selected subject
+  String _pdfPath = '';
+  final Map<int, int> _selectedNumbers = {}; // Map to store selected numbers
   final List<String> _alphabetChoices = ['A', 'B', 'C', 'D'];
 
   @override
   void initState() {
     super.initState();
-    _requestPermission(); // Request permission when the app starts
-
-    _pdfPath = _subjectFiles[_selectedSubject]!;
+    _pdfPath = _gradeSubjectFiles[_selectedGrade]![_selectedSubject]!;
   }
 
   Future<void> _requestPermission() async {
@@ -171,19 +195,45 @@ class _MyAppState extends State<MyApp> {
                     ),
                     const SizedBox(height: 25.0),
                     DropdownButton<String>(
+                      value: _selectedGrade,
+                      onChanged: (newValue) {
+                        setState(() {
+                          _selectedGrade = newValue!;
+                          _selectedSubject = 'Select Subject';
+                          _isButtonDisabled = false;
+                          _selectedNumbers
+                              .clear(); // Reset subject when grade changes
+                          _pdfPath = _gradeSubjectFiles[_selectedGrade]![
+                              _selectedSubject]!;
+                        });
+                      },
+                      items: _gradeSubjectFiles.keys.map((String grade) {
+                        return DropdownMenuItem<String>(
+                          value: grade,
+                          child: Text(grade),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 25.0),
+                    DropdownButton<String>(
                       value: _selectedSubject,
                       onChanged: (newValue) {
                         setState(() {
-                          _selectedNumbers.clear();
                           _isButtonDisabled = false;
                           _selectedSubject = newValue!;
-                          _pdfPath = _subjectFiles[_selectedSubject]!;
+                          _selectedNumbers.clear();
+                          _pdfPath = _gradeSubjectFiles[_selectedGrade]![
+                              _selectedSubject]!;
                         });
                       },
-                      items: _subjectFiles.keys.map((String subject) {
+                      items: _getSortedSubjects(_selectedGrade)
+                          .map((String subject) {
                         return DropdownMenuItem<String>(
                           value: subject,
-                          child: Text(subject),
+                          child: SizedBox(
+                            child:
+                                Text(subject, overflow: TextOverflow.ellipsis),
+                          ),
                         );
                       }).toList(),
                     ),
