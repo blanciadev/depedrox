@@ -246,52 +246,36 @@ class _MyAppState extends State<MyApp> {
                     const SizedBox(height: 10.0),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.75,
-                      child: SingleChildScrollView(
-                        child: SizedBox(
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: 10,
-                            itemBuilder: (context, index) {
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('${index + 1}: '),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: _alphabetChoices.map((choice) {
-                                      int groupValue =
-                                          _selectedNumbers[index] ?? -1;
-                                      return Row(
-                                        children: [
-                                          Container(
-                                            width:
-                                                18, // Adjust the width as needed
-                                            child: Radio<int>(
-                                              value: _alphabetChoices
-                                                  .indexOf(choice),
-                                              groupValue: groupValue,
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  _selectedNumbers[index] =
-                                                      value!;
-                                                });
-                                              },
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                              width:
-                                                  2), // Adjust the spacing between Radio and Text
-                                          Text(choice),
-                                        ],
-                                      );
-                                    }).toList(),
-                                  ),
+                      child: DefaultTabController(
+                        length: 4,
+                        child: Column(
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.75,
+                              child: TabBar(
+                                tabs: [
+                                  Tab(text: 'P1'),
+                                  Tab(text: 'P2'),
+                                  Tab(text: 'P3'),
+                                  Tab(text: 'P4'),
                                 ],
-                              );
-                            },
-                          ),
+
+                                labelStyle: TextStyle(fontSize: 8),
+                                indicatorSize: TabBarIndicatorSize
+                                    .label, // Set indicator size to label
+                              ),
+                            ),
+                            Expanded(
+                              child: TabBarView(
+                                children: [
+                                  buildListView(25, 1),
+                                  buildListView(25, 26),
+                                  buildListView(25, 51),
+                                  buildListView(15, 76),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -300,13 +284,13 @@ class _MyAppState extends State<MyApp> {
                               _isAnyFieldEmpty() ||
                               _selectedSubject == 'Select Subject' ||
                               !_areNumbersValid() ||
-                              _selectedNumbers.length != 10
+                              _selectedNumbers.length != 90
                           ? null
                           : () async {
                               if (!_isAnyFieldEmpty() &&
                                   _selectedSubject != 'Select Subject' &&
                                   _areNumbersValid() &&
-                                  _selectedNumbers.length == 10) {
+                                  _selectedNumbers.length == 90) {
                                 // Call your function and show AlertDialog
                                 String schoolID = schoolIDController.text;
                                 String learnersRefNo =
@@ -365,6 +349,52 @@ class _MyAppState extends State<MyApp> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget buildListView(int itemCount, int startIndex) {
+    return SingleChildScrollView(
+      child: ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: itemCount,
+        itemBuilder: (context, index) {
+          return buildListItem(index + startIndex);
+        },
+      ),
+    );
+  }
+
+  Widget buildListItem(int itemIndex) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('$itemIndex: '),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: _alphabetChoices.map((choice) {
+            int groupValue = _selectedNumbers[itemIndex - 1] ?? -1;
+            return Row(
+              children: [
+                Container(
+                  width: 18,
+                  child: Radio<int>(
+                    value: _alphabetChoices.indexOf(choice),
+                    groupValue: groupValue,
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedNumbers[itemIndex - 1] = value!;
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(width: 2),
+                Text(choice),
+              ],
+            );
+          }).toList(),
+        ),
+      ],
     );
   }
 
