@@ -27,12 +27,15 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  String _selectedGrade = 'Grade 3'; // Default selected grade
+  String _selectedGrade = 'Grade Level'; // Default selected grade
   final schoolIDController = TextEditingController();
   final learnersRefNoController = TextEditingController();
   final fullNameController = TextEditingController();
 
   final Map<String, Map<String, String>> _gradeSubjectFiles = {
+    'Grade Level': {
+      'Select Subject': 'assets/quest/RX-Adobe-RAT.pdf',
+    },
     'Grade 3': {
       'Select Subject': 'assets/quest/RX-Adobe-RAT.pdf',
       'Math': 'assets/quest/grade_3/Mathematics.pdf',
@@ -188,6 +191,9 @@ class _MyAppState extends State<MyApp> {
                               fillColor: Colors.white,
                               filled: true,
                             ),
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(50),
+                            ],
                           ),
                           const SizedBox(height: 5.0),
                         ],
