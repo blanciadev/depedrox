@@ -38,27 +38,49 @@ class _MyAppState extends State<MyApp> {
     },
     'Grade 3': {
       'Select Subject': 'assets/quest/RX-Adobe-RAT.pdf',
-      'Math': 'assets/quest/grade_3/Mathematics.pdf',
+      'Math': 'assets/quest/grade_3/Math.pdf',
       'Filipino': 'assets/quest/grade_3/Filipino.pdf',
-      'ESP': 'assets/quest/grade_3/Edukasyong Pagkakatao.pdf',
+      'ESP': 'assets/quest/grade_3/ESD.pdf',
+      'English': 'assets/quest/grade_3/english-3.pdf',
+      'Science': 'assets/quest/grade_3/Science.pdf',
+      'Araling Panlipunan': 'assets/quest/grade_3/AP.pdf',
     },
     'Grade 6': {
       'Select Subject': 'assets/quest/RX-Adobe-RAT.pdf',
-      'Math': 'assets/grade6/math.pdf',
-      'English': 'assets/grade6/english.pdf',
-      'Science': 'assets/grade6/science.pdf',
+      'Filipino': 'assets/grade_6/Filipino-6.pdf',
+      'English': 'assets/quest/grade_6/english-6.pdf',
+      'Mathematics': 'assets/quest/grade_6/Math-6.pdf',
+      'Science': 'assets/quest/grade_6/Science-6.pdf',
+      'Araling Panlipunan': 'assets/quest/grade_6/ap-6.pdf',
+      'ESP': 'assets/quest/grade_6/Values-6.pdf',
+      'MAPEH': 'assets/quest/grade_6/Mapeh-6.pdf',
+      'TLE': 'assets/quest/grade_6/TLE-6.pdf',
     },
     'Grade 10': {
       'Select Subject': 'assets/quest/RX-Adobe-RAT.pdf',
-      'Math': 'assets/grade10/math.pdf',
-      'English': 'assets/grade10/english.pdf',
-      'Science': 'assets/grade10/science.pdf',
+      'Filipino': 'assets/quest/grade_10/Filipino-10.pdf',
+      'English': 'assets/quest/grade_10/english-10.pdf',
+      'Mathematics': 'assets/quest/grade_10/math-10.pdf',
+      'Science': 'assets/quest/grade_10/Science-10.pdf',
+      'Araling Panlipunan': 'assets/quest/grade_10/ap-10.pdf',
+      'ESP': 'assets/quest/grade_10/Values-10.pdf',
+      'MAPEH': 'assets/quest/grade_10/mapeh-10.pdf',
+      'TLE-Cookery': 'assets/quest/grade_10/TLE-Cookery-10.pdf',
+      'TLE-AgriCrop': 'assets/quest/grade_10/acp-10.pdf',
+      'TLE-CSS': 'assets/quest/grade_10/ICT-CSS.pdf',
+      'TLE-EIM': 'assets/quest/grade_10/EIM-10.pdf',
     },
     'Grade 12': {
       'Select Subject': 'assets/quest/RX-Adobe-RAT.pdf',
-      'Math': 'assets/grade12/math.pdf',
-      'English': 'assets/grade12/english.pdf',
-      'Science': 'assets/grade12/science.pdf',
+      'Language Filipino': 'assets/quest/grade_12/filipino-12.pdf',
+      'English': 'assets/quest/grade_12/english-12.pdf',
+      'Mathematics': 'assets/quest/grade_12/math-12.pdf',
+      'Science': 'assets/quest/grade_12/science-12.pdf',
+      'HUMSS/Phil': 'assets/quest/grade_12/ap-12.pdf',
+      'PE': 'assets/quest/grade_12/mapeh-12.pdf',
+      'Emp-Tech': 'assets/quest/grade_12/emptech-12.pdf',
+      'Entrepreneurship': 'assets/quest/grade_12/entrep-12.pdf',
+      'Media-IL': 'assets/quest/grade_12/media-12.pdf',
     },
   };
 
@@ -297,7 +319,10 @@ class _MyAppState extends State<MyApp> {
                                     learnersRefNoController.text;
                                 String fullName = fullNameController.text;
                                 String subject = _selectedSubject;
-
+                                String gradelvl = _selectedGrade;
+                                String trimGrade = gradelvl.substring(
+                                  6,
+                                );
                                 // Disable button after click
                                 setState(() {
                                   _isButtonDisabled = true;
@@ -310,6 +335,8 @@ class _MyAppState extends State<MyApp> {
                                   schoolID,
                                   learnersRefNo,
                                   fullName,
+                                  gradelvl,
+                                  trimGrade,
                                   subject,
                                 );
                               } else {
@@ -423,31 +450,35 @@ class _MyAppState extends State<MyApp> {
     String schoolID,
     String learnersRefNo,
     String fullName,
+    String gradelvl,
+    String trimGrade,
     String subject,
   ) async {
     try {
       final directory = await getExternalStorageDirectory();
       final folderPath = '${directory!.path}/ROX_ACHIEVEMENT_TEST';
       final folder = Directory(folderPath);
+
       if (!folder.existsSync()) {
         folder.createSync(recursive: true);
       }
       final file = File(
-          '$folderPath/$schoolID-$learnersRefNo-Questionnaire-$subject.rox');
+          '$folderPath/$schoolID-$learnersRefNo-$fullName-$subject-$trimGrade.rox');
       final sink = file.openWrite();
 
-      sink.writeln('"$schoolID"');
-      sink.writeln('"$learnersRefNo"');
-      sink.writeln('"$fullName"');
-      sink.writeln('"$subject"');
+      sink.write('$schoolID,');
+      sink.write('$learnersRefNo,');
+      sink.write('$fullName,');
+      sink.write('$subject');
+      sink.write('$trimGrade,');
 
       String choicesString = selectedNumbers.keys.map((index) {
         final choiceIndex = selectedNumbers[index];
         final choice = alphabetChoices[choiceIndex ?? 0];
-        return '"$choice"';
+        return '$choice';
       }).join(', ');
 
-      sink.writeln('Choices: $choicesString');
+      sink.writeln('$choicesString');
 
       await sink.close(); // Close the file after writing
 

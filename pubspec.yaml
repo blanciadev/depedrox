@@ -82,9 +82,52 @@ flutter:
     - assets/RX_ADOBE.png
 
     - assets/quest/RX-Adobe-RAT.pdf
+
+    - assets/quest/grade_3/AP.pdf
+    - assets/quest/grade_3/Math.pdf
+    - assets/quest/grade_3/ESD.pdf
     - assets/quest/grade_3/Filipino.pdf
-    - assets/quest/grade_3/Mathematics.pdf
-    - assets/quest/grade_3/Edukasyong Pagkakatao.pdf
+    - assets/quest/grade_3/Science.pdf
+    - assets/quest/grade_3/Values.pdf
+    - assets/quest/grade_3/english-3.pdf
+
+    - assets/quest/grade_6/ap-6.pdf
+    - assets/quest/grade_6/Filipino-6.pdf
+    - assets/quest/grade_6/Mapeh-6.pdf
+    - assets/quest/grade_6/Math-6.pdf
+    - assets/quest/grade_6/Science-6.pdf
+    - assets/quest/grade_6/TLE-6.pdf
+    - assets/quest/grade_6/Values-6.pdf
+    - assets/quest/grade_6/english-6.pdf
+
+
+    - assets/quest/grade_10/ap-10.pdf
+    - assets/quest/grade_10/acp-10.pdf
+    - assets/quest/grade_10/english-10.pdf
+    - assets/quest/grade_10/Filipino-10.pdf
+    - assets/quest/grade_10/mapeh-10.pdf
+    - assets/quest/grade_10/math-10.pdf
+    - assets/quest/grade_10/Science-10.pdf
+    - assets/quest/grade_10/TLE-Cookery-10.pdf
+    - assets/quest/grade_10/Values-10.pdf
+    - assets/quest/grade_10/EIM-10.pdf
+    - assets/quest/grade_10/ICT-CSS.pdf
+
+    - assets/quest/grade_12/ap-12.pdf 
+    - assets/quest/grade_12/english-12.pdf
+    - assets/quest/grade_12/emptech-12.pdf
+    - assets/quest/grade_12/filipino-12.pdf
+    - assets/quest/grade_12/mapeh-12.pdf
+    - assets/quest/grade_12/math-12.pdf
+    - assets/quest/grade_12/science-12.pdf
+    - assets/quest/grade_12/entrep-12.pdf
+    - assets/quest/grade_12/info-12.pdf
+    - assets/quest/grade_12/media-12.pdf
+ 
+
+
+
+
 
     - assets/appstore.png
     - assets/playstore.png
